@@ -4,20 +4,51 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TicTacToe</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/styles.min.css" />
   </head>
   <body>
-    <div id="gameboard" class="gameboard">
-      <div class="gameboard__box" data-position=0></div>
-      <div class="gameboard__box" data-position=1></div>
-      <div class="gameboard__box" data-position=2></div>
-      <div class="gameboard__box" data-position=3></div>
-      <div class="gameboard__box" data-position=4></div>
-      <div class="gameboard__box" data-position=5></div>
-      <div class="gameboard__box" data-position=6></div>
-      <div class="gameboard__box" data-position=7></div>
-      <div class="gameboard__box" data-position=8></div>
-    </div>
+    <nav class="nav">
+      <div class="nav__logo"><img src="assets/logo.svg" alt="logo" /></div>
+      <div class="nav__current-turn">
+        <div class="nav__current-turn_wrapper">
+          <img id="turn-icon" src="assets/icon-x-gray.svg" alt="player" />
+        </div>
+        <span class="nav__current-turn_label">TURN</span>
+      </div>
+      <button id="restart-btn" class="nav__restart-btn"><img src="assets/icon-restart.svg" alt="restart" /></button>
+    </nav>
+
+    <section class="grid-board-section">
+      <div id="gameboard" class="gameboard">
+        <div class="gameboard__box" data-position="0"></div>
+        <div class="gameboard__box" data-position="1"></div>
+        <div class="gameboard__box" data-position="2"></div>
+        <div class="gameboard__box" data-position="3"></div>
+        <div class="gameboard__box" data-position="4"></div>
+        <div class="gameboard__box" data-position="5"></div>
+        <div class="gameboard__box" data-position="6"></div>
+        <div class="gameboard__box" data-position="7"></div>
+        <div class="gameboard__box" data-position="8"></div>
+      </div>
+    </section>
+
+    <section class="summary">
+      <div class="summary__box lightblue">
+        <h1 class="summary__box_label">Player X</h1>
+        <div class="summary__box_score">0</div>
+      </div>
+      <div class="summary__box gray">
+        <h1 class="summary__box_label">Ties</h1>
+        <div class="summary__box_score">0</div>
+      </div>
+      <div class="summary__box yellow">  
+        <h1 class="summary__box_label">Player O</h1>
+        <div class="summary__box_score">0</div>
+      </div>
+    </section>
 
     <script src="script.js"></script>
   </body>

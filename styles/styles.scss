@@ -1,0 +1,154 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  
+  body {
+    height: 100vh;
+    width: 100%;
+    background-color: #1A2B33;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+  }
+
+
+  .nav {
+    height: 130px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    &__logo {
+      height: 32px;
+      width: 72px;
+    }
+
+    &__current-turn {
+      height: 50px;
+      width: 150px;
+      border-radius: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1E3640;
+      box-shadow: 0 10px 10px rgba(0, 0, 0, .3);
+
+      &_wrapper {
+        height: 50px;
+        width: 50px;
+        display: grid;
+        place-items: center;
+
+        img {
+          height: 40%;
+          width: 40%;
+          object-fit: contain;
+        }
+      }
+
+      &_label {
+        color: #A9BEC8;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-right: 12px;
+      }
+    }
+
+    &__restart-btn {
+      height: 50px;
+      width: 50px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #A9BEC8;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 -5px 0px rgba(0, 0, 0, .3);
+
+      img {
+        height: 50%;
+        width: 50%;
+        object-fit: contain;
+      }
+    }
+  }
+  
+
+  .grid-board-section {
+    display: grid;
+    place-items: center;
+  }
+
+  .gameboard {
+    background: transparent;
+    min-height: 300px;
+    max-height: auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+    grid-template-rows: repeat(3, 100px);
+    grid-gap: 1.5rem;
+
+    &__box {
+      background-color: #1E3640;
+      border: 2px solid rgb(65, 80, 79);
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 10px 10px rgba(0, 0, 0, .5);
+      display: grid;
+      place-items: center;
+
+      img {
+        height: 60%;
+        width: 60%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .summary {
+    height: 140px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__box {
+      margin-right: 15px;   
+      height: 65px;
+      width: 180px;  
+      border-radius: 0.6rem; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #1A2B33;
+
+      &_label {
+        font-size: 0.8rem;
+        font-weight: 400;
+      }
+
+      &_score {
+        font-size: 1.6rem;
+        font-weight: 800;
+      }
+    }
+  }
+  
+  .lightblue {
+    background-color: #34C3BE;
+  }
+
+  .gray {
+    background-color: #A9BEC8;
+  }
+
+  .yellow {
+    margin-right: 0px !important;
+    background-color: #F2B138;
+  }
