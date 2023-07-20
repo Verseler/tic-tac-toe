@@ -100,9 +100,17 @@
       display: grid;
       place-items: center;
 
+      /*
+      &:hover {
+        background: url('/assets/icon-x-bg-outline.svg');
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+      }
+      */
+
       img {
-        height: 60%;
-        width: 60%;
+        height: 65%;
+        width: 65%;
         object-fit: contain;
       }
     }
@@ -138,6 +146,75 @@
         font-weight: 800;
       }
     }
+  }
+
+  .winning-message-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #060a0c69;
+    display: none;
+    place-items: center;
+  }
+
+  .winning-message {
+    height: 250px;
+    width: 100%;
+    background-color: #1E3640;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &__congrats-text {
+      font-size: 1rem;
+      color:#A9BEC8;
+      margin-bottom: 20px;
+    }
+
+    &__winner-container {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+
+      &_result {
+        height: 60px;
+        width: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          height: 60%;
+          width: 60%;
+          object-fit: contain;
+        }
+      }
+
+      &_text {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color:#34C3BE;
+      }
+    }
+
+    &__next-round-btn {
+      color:#1A2B33;
+      font-size: 0.9rem;
+      padding: 1.1em 5em;
+      letter-spacing: 0.1rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 0.6rem;
+      background-color: #F2B138;
+      box-shadow: inset 0 -3px 2px rgba(0, 0, 0, .3);
+      cursor: pointer;
+    }
+
   }
   
   .lightblue {

@@ -4,9 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TicTacToe</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles/styles.min.css" />
   </head>
   <body>
@@ -14,11 +17,13 @@
       <div class="nav__logo"><img src="assets/logo.svg" alt="logo" /></div>
       <div class="nav__current-turn">
         <div class="nav__current-turn_wrapper">
-          <img id="turn-icon" src="assets/icon-x-gray.svg" alt="player" />
+          <img id="turn-icon" src="assets/icon-x-bg.svg" alt="player" />
         </div>
         <span class="nav__current-turn_label">TURN</span>
       </div>
-      <button id="restart-btn" class="nav__restart-btn"><img src="assets/icon-restart.svg" alt="restart" /></button>
+      <button id="restart-btn" class="nav__restart-btn">
+        <img src="assets/icon-restart.svg" alt="restart" />
+      </button>
     </nav>
 
     <section class="grid-board-section">
@@ -38,17 +43,30 @@
     <section class="summary">
       <div class="summary__box lightblue">
         <h1 class="summary__box_label">Player X</h1>
-        <div class="summary__box_score">0</div>
+        <div id="x-score" class="summary__box_score">0</div>
       </div>
       <div class="summary__box gray">
         <h1 class="summary__box_label">Ties</h1>
-        <div class="summary__box_score">0</div>
+        <div id="tie-score" class="summary__box_score">0</div>
       </div>
-      <div class="summary__box yellow">  
+      <div class="summary__box yellow">
         <h1 class="summary__box_label">Player O</h1>
-        <div class="summary__box_score">0</div>
+        <div id="o-score" class="summary__box_score">0</div>
       </div>
     </section>
+
+    <div id="winning-message-wrapper" class="winning-message-wrapper">
+      <div class="winning-message">
+        <span class="winning-message__congrats-text">CONGRATULATIONS !</span>
+        <div class="winning-message__winner-container">
+          <div id="result" class="winning-message__winner-container_result">
+            <img src="assets/icon-x.svg" >
+          </div>
+          <span class="winning-message__winner-container_text">TAKES THE ROUND</span>
+        </div>
+        <button id="next-round-btn" class="winning-message__next-round-btn">NEXT ROUND</button>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>
