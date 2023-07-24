@@ -17,7 +17,7 @@
       <div class="nav__logo"><img src="assets/logo.svg" alt="logo" /></div>
       <div class="nav__current-turn">
         <div class="nav__current-turn_wrapper">
-          <img id="turn-icon" src="assets/icon-x-bg.svg" alt="player" />
+          <img id="turn-icon" src="/assets/icon-x-bg.svg" alt="player" />
         </div>
         <span class="nav__current-turn_label">TURN</span>
       </div>
@@ -28,15 +28,15 @@
 
     <section class="grid-board-section">
       <div id="gameboard" class="gameboard">
-        <div class="gameboard__box" data-position="0"></div>
-        <div class="gameboard__box" data-position="1"></div>
-        <div class="gameboard__box" data-position="2"></div>
-        <div class="gameboard__box" data-position="3"></div>
-        <div class="gameboard__box" data-position="4"></div>
-        <div class="gameboard__box" data-position="5"></div>
-        <div class="gameboard__box" data-position="6"></div>
-        <div class="gameboard__box" data-position="7"></div>
-        <div class="gameboard__box" data-position="8"></div>
+        <div class="gameboard__cell" data-cell></div>
+        <div class="gameboard__cell" data-cell></div>
+        <div class="gameboard__cell" data-cell></div>
+        <div class="gameboard__cell" data-cell></div>
+        <div class="gameboard__cell" data-cell></div>
+        <div class="gameboard__cell" data-cell></div>
+        <div class="gameboard__cell" data-cell></div>
+        <div class="gameboard__cell" data-cell></div>
+        <div class="gameboard__cell" data-cell></div>
       </div>
     </section>
 
@@ -60,11 +60,15 @@
         <span class="winning-message__congrats-text">CONGRATULATIONS !</span>
         <div class="winning-message__winner-container">
           <div id="result" class="winning-message__winner-container_result">
-            <img src="assets/icon-x.svg" >
+            <img src="assets/icon-x.svg" />
           </div>
-          <span class="winning-message__winner-container_text">TAKES THE ROUND</span>
+          <span class="winning-message__winner-container_text"
+            >TAKES THE ROUND</span
+          >
         </div>
-        <button id="next-round-btn" class="winning-message__next-round-btn">NEXT ROUND</button>
+        <button id="next-round-btn" class="winning-message__next-round-btn">
+          NEXT ROUND
+        </button>
       </div>
     </div>
 

@@ -1,211 +1,199 @@
-let round = 1;
-
-//scores
-const scores = {
-  X: 0,
-  O: 0,
-  TIE: 0,
-};
-
-/* gameboard module */
-let GameBoard = (() => {
+const GameBoard = (() => {
+  //primarly used for checking if there is a winning combination
   const board = ["", "", "", "", "", "", "", "", ""];
-  const boardBoxes = document.getElementsByClassName("gameboard__box");
-  const symbol = {
-    X: "icon-x",
-    O: "icon-o",
-    "x-gray": "icon-x-bg",
-    "o-gray": "icon-o-bg",
-  };
+  const boardCells = document.querySelectorAll("[data-cell]");
 
-  return {
-    getSymbol: () => {
-      return symbol;
-    },
-
-    getBoard: () => {
-      return board;
-    },
-
-    getBoardBoxes: () => {
-      return boardBoxes;
-    },
-
-    setNextTurnIcon: (key) => {
-      //set next turn label
-      const turnIcon = document.getElementById("turn-icon");
-      turnIcon.src = `assets/${symbol[key]}.svg`;
-    },
-
-    //update the Gameboard displayed in the web
-    setDisplay: () => {
-      for (let i = 0; i < boardBoxes.length; i++) {
-        let key = board[i];
-        if (board[i] === "") {
-          continue;
-        } else {
-          boardBoxes[i].innerHTML = `<img src="assets/${symbol[key]}.svg" />`;
-        }
+  const setBoard = (markClass) => {
+    //update the board base on board cell that has a markClass
+    for (let i = 0; i < boardCells.length; i++) {
+      if (boardCells[i].classList.contains(markClass)) {
+        board[i] = markClass;
       }
-    },
-
-    //clear board
-    clearDisplay: () => {
-      round = 1;
-      GameBoard.setNextTurnIcon('X');
-      for (let i = 0; i < boardBoxes.length; i++) {
-        boardBoxes[i].style.backgroundColor = "#1E3640"; //clear winning combination background color
-        boardBoxes[i].innerHTML = ""; //clear gameboard display in web
-        board[i] = ""; //clear board array
-      }
-    },
-
-    restartGame: () => {  
-      Object.keys(scores).forEach((item) => {
-        scores[item] = 0;
-      });
-      displayScores();
-      GameBoard.clearDisplay();
-      //!!!!!!add also, clear scores
-    },
-
-    //update gamboardArray based on the player move
-    setBoard: (movePosition, symbol) => {
-      board[movePosition] = symbol;
-      //after the move update the displayed gameboard
-      GameBoard.setDisplay();
-    },
-
-    //verify if player move is valid in gameboard
-    moveIsValid: (movePosition) => {
-      return board[movePosition] === "" ? true : false;
-    },
-  };
-})();
-
-/* players object using factory function */
-let Players = (symbol) => {
-  let playerSymbol = symbol;
-
-  const makeMove = (move) => {
-    GameBoard.setBoard(move, playerSymbol); //update current player move
-  };
-
-  //update the scores of player x, o ,and tie
-  const updateScores = (name) => {
-    scores[name] = scores[name] + 1;
-
-    //set scores in the web
-    displayScores();
-    displayWinningMessage(name);
-  };
-
-  //verify if win
-  const isWin = (round) => {
-    let board = GameBoard.getBoard();
-    let playerWin = false;
-    const winningCombination = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-
-    //check if player moves is a winning combination
-    winningCombination.forEach((combinations) => {
-      if (
-        combinations.every((combination) => board[combination] === playerSymbol)
-      ) {
-        playerWin = true;
-        changeBoxBackground(combinations);
-        updateScores(playerSymbol);
-      }
-    });
-    //if round is 9 end the game as a TIE
-    if (round === 9 && playerWin === false) {
-      updateScores("TIE");
     }
   };
 
-  //change the background of box if it is a winning combination
-  const changeBoxBackground = (combinations) => {
-    let boardBoxes = GameBoard.getBoardBoxes();
-
-    combinations.forEach((index) => {
-      boardBoxes[index].style.backgroundColor = "#3b5968";
-    });
+  const clearBoard = (playerXMarkCLas, playerOMarkCLass) => {
+    for (let i = 0; i < boardCells.length; i++) {
+      //clear boardUI
+      if (boardCells[i].classList.contains(playerXMarkCLas)) {
+        boardCells[i].classList.remove(playerXMarkCLas);
+      }
+      if (boardCells[i].classList.contains(playerOMarkCLass)) {
+        boardCells[i].classList.remove(playerOMarkCLass);
+      }
+      //clear boardArray
+      board[i] = "";
+    }
   };
 
-  return { makeMove, isWin };
+  return { board, boardCells, setBoard, clearBoard };
+})();
+
+const Players = (mark) => {
+  let markPreviewClass = `${mark}-mark-prev`;
+  let markClass = `${mark}-mark`;
+  let score = 0;
+
+  const addScore = () => {
+    score++;
+  };
+
+  const getScore = () => {
+    return score;
+  };
+
+  return { markClass, markPreviewClass, addScore, getScore };
 };
 
-//popup a winning message after the  end game
-const displayWinningMessage = (name) => {
-  const symbol = GameBoard.getSymbol();
+//create Player object instances
+const playerX = Players("x");
+const playerO = Players("o");
+let xTurn = true, isXFirstTurnNextRound = false, turnCount = 1, drawScore = 0;
+
+function addDrawScore() {drawScore++;}
+function getDrawScore() {return drawScore;}
+function setNextTurnMark(xTurn) {
+  let nextTurnPlayerMarkImg = xTurn ? 'icon-o-bg.svg' : 'icon-x-bg.svg';
+  document.getElementById('turn-icon').src = `/assets/${nextTurnPlayerMarkImg}`;
+}
+
+function startRound() {
+  GameBoard.boardCells.forEach((cell) => {
+    cell.addEventListener("click", makeMark, { once: true });
+    cell.addEventListener("mouseover", showPreviewMark);
+    cell.addEventListener("mouseout", hidePreviewMark);
+  });
+}
+
+function makeMark(e) {
+  const cell = e.target;
+  //when clicked and there is still a player markPreviewClass, remove it.
+  if (
+    cell.classList.contains(playerX.markPreviewClass) ||
+    cell.classList.contains(playerO.markPreviewClass)
+  ) {
+    hidePreviewMark(e);
+  }
+  //set the playerMarkClass whoever player this turn is playing
+  let playerMarkClass = xTurn ? playerX.markClass : playerO.markClass;
+  cell.classList.add(playerMarkClass);
+  GameBoard.setBoard(playerMarkClass);
+
+  //set next turn player mark
+  setNextTurnMark(xTurn);
+
+  //if player win end this round and update points
+  if (isPlayerWin(playerMarkClass) === true) {
+    //add score to the winning player
+    if (playerMarkClass === playerX.markClass) {
+      playerX.addScore();
+    } else {
+      playerO.addScore();
+    }
+    displayWinningMessage(playerMarkClass);
+  } else if (turnCount === 9) {
+    addDrawScore();
+    displayWinningMessage("TIE");
+  }
+  turnCount++;
+  xTurn = !xTurn; //change turn
+}
+
+//when mouseover the cell or cell is hovered show current player markPreview image
+function showPreviewMark(e) {
+  const cell = e.target;
+  if (
+    !cell.classList.contains(playerX.markClass) &&
+    !cell.classList.contains(playerO.markClass)
+  ) {
+    if (xTurn) {
+      cell.classList.add(playerX.markPreviewClass);
+    } else {
+      cell.classList.add(playerO.markPreviewClass);
+    }
+  }
+}
+
+//when mouse cursor is out the cell hide the current player markPreview image
+function hidePreviewMark(e) {
+  const cell = e.target;
+  if (xTurn) {
+    cell.classList.remove(playerX.markPreviewClass);
+  } else {
+    cell.classList.remove(playerO.markPreviewClass);
+  }
+}
+
+//show winning message
+const displayWinningMessage = (markClass) => {
+  //display latest score
+  document.getElementById('x-score').innerText = playerX.getScore();
+  document.getElementById('tie-score').innerText = getDrawScore();
+  document.getElementById('o-score').innerText = playerO.getScore();
+
+  //display winning message
   const winningMessageContainer = document.getElementById(
     "winning-message-wrapper"
   );
   winningMessageContainer.style.display = "flex";
 
-  const result = document.getElementById("result");
-  if (name === "TIE") {
-    result.innerHTML = `<span class="winning-message__winner-container_text">TIE</span>`;
-  } else {
-    result.innerHTML = `<img src="assets/${symbol[name]}.svg" >`;
-  }
+  let resultWinningSign = 
+  (markClass === 'x-mark') ? 
+  `<img src='assets/icon-x.svg' class="winning-message__winner-container_img">` :
+  (markClass === 'o-mark') ?
+  `<img src='assets/icon-o.svg' class="winning-message__winner-container_img">` :
+  `<span class="winning-message__winner-container_text">TIE</span>`;
+
+  document.getElementById("result").innerHTML = resultWinningSign;
 };
 
-function displayScores() {
-  document.getElementById("x-score").innerText = scores["X"];
-    document.getElementById("o-score").innerText = scores["O"];
-    document.getElementById("tie-score").innerText = scores["TIE"];
-}
+//check if current player win
+const isPlayerWin = (playerMarkClass) => {
+  const winningCombination = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  let isWin = false;
 
-function gameStart() {
-  const player1 = Players("X");
-  const player2 = Players("O");
-  let boardBoxes = GameBoard.getBoardBoxes();
-  let move;
+  //check if player moves is a winning combination
+  winningCombination.forEach((combinations) => {
+    if (
+      combinations.every(
+        (combination) => GameBoard.board[combination] === playerMarkClass
+      )
+    ) {
+      isWin = true;
+    }
+  });
+  return isWin;
+};
 
-  for (let i = 0; i < boardBoxes.length; i++) {
-    boardBoxes[i].addEventListener("click", () => {
-      move = boardBoxes[i].getAttribute("data-position");
-      //verify first if move is valid before making a move
-      if (GameBoard.moveIsValid(move)) {
-        if (round % 2 === 0) {
-          GameBoard.setNextTurnIcon("x-gray");
-          player2.makeMove(move);
-          player2.isWin(round);
-        } else {
-          GameBoard.setNextTurnIcon("o-gray");
-          player1.makeMove(move);
-          player1.isWin(round);
-        }
-        round++;
-      }
-    });
-  }
-}
-
-//when restart button is press restart the game
-const restBtn = document.getElementById("restart-btn");
-restBtn.addEventListener("click", () => {
-  GameBoard.restartGame();
-});
-
+//next round button eventlistener
 const nextRoundBtn = document.getElementById("next-round-btn");
 nextRoundBtn.addEventListener("click", () => {
-  const winningMessageContainer = document.getElementById(
-    "winning-message-wrapper"
-  );
-  winningMessageContainer.style.display = "none";
-  GameBoard.clearDisplay();
+  document.getElementById("winning-message-wrapper").style.display = "none";
+  GameBoard.clearBoard(playerX.markClass, playerO.markClass); 
+  //reset turn and counts
+  xTurn = (isXFirstTurnNextRound) ? true : false;
+  isXFirstTurnNextRound = !isXFirstTurnNextRound;
+  turnCount = 1;
+  setNextTurnMark(isXFirstTurnNextRound);
+  startRound();
+});
+
+//restartGame
+
+const restartBtn = document.getElementById("restart-btn");
+restartBtn.addEventListener("click", () => {
+  window.location.reload();
 });
 
 window.onload = () => {
-  gameStart();
+  startRound();
 };
